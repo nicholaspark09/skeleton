@@ -1,0 +1,90 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    defaultConfig {
+        applicationId "com.cincinnatiai.example"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding.enabled = true
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(
+            deps.kotlin.stdlib,
+
+            deps.support.app_compat,
+            deps.support.design,
+            deps.support.cardview,
+            deps.constraint_layout,
+
+            deps.lifecycle.runtime,
+            deps.lifecycle.extensions,
+            deps.lifecycle.java8,
+
+            deps.dex.multidex,
+
+            deps.timber,
+
+            deps.dagger.runtime,
+            deps.dagger.android,
+            deps.dagger.android_support,
+
+            deps.firebase.core,
+            deps.firebase.auth,
+            deps.firebase.db,
+            deps.firebase.vision,
+            deps.firebase.firestore,
+            deps.firebase.storage,
+
+            deps.playServices.auth,
+
+            deps.rxjava.base,
+            deps.rxjava.android,
+            deps.rxbinding_kotlin,
+
+            deps.glide.runtime,
+
+            deps.circleImageView,
+    )
+
+    kapt(
+            deps.dagger.compiler,
+            deps.dagger.android_support_compiler,
+            deps.lifecycle.compiler,
+            deps.glide.compiler,
+    )
+
+    testImplementation(
+            deps.junit,
+            "android.arch.core:core-testing:$versions.arch_core",
+    )
+
+    androidTestImplementation(
+            'com.android.support.test:runner:1.0.2',
+            'com.android.support.test.espresso:espresso-core:3.0.2',
+            "android.arch.core:core-testing:$versions.arch_core",
+    )
+
+    kaptAndroidTest deps.dagger.compiler
+    kaptTest deps.dagger.compiler
+}
